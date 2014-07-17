@@ -1,0 +1,35 @@
+CC = gcc  
+CFLAG = -Wall -g -w -fPIC 
+
+SRC = ./src
+OBJ = ./obj
+
+all: Demo a
+
+LIB_FLAG = -L/usr/local/lib -L/usr/lib -L./lib
+INCLUDE = -I./include -I/usr/local/include/opencv2.1/
+MY_LIB = -lm -lcv -lcxcore -lcvaux -lhighgui -lml
+objects =  $(OBJ)/ColorLayout.o		\
+	     $(OBJ)/EdgeHist.o		\
+	     $(OBJ)/Process.o		\
+	     $(OBJ)/Get_ColorGist.o		\
+	     $(OBJ)/ImageTypeAJudge.o		\
+	     $(OBJ)/Demo.o        \
+     	    
+                
+Demo: $(objects)
+	@echo ----------------------------------------------
+	$(CC) $(CFLAG) $(INCLUDE) $(LIB_FLAG) $(MY_LIB) -o Demo $(objects)
+	@echo ----------------------------------------------
+
+$(objects): %.o:
+	@echo ----------------------------------------------
+	$(CC) -c $(CFLAG) $(INCLUDE) -o $@ $(SRC)/$(@F:.o=.cpp)
+
+a:
+	ar -rsv libImageTypeAJudge_2_2_0.a ./obj/ColorLayout.o ./obj/EdgeHist.o ./obj/Process.o ./obj/Get_ColorGist.o ./obj/ImageTypeAJudge.o
+.PHONY : clean
+clean :
+	rm -f Demo ./obj/*
+
+
